@@ -34,4 +34,5 @@
 - 工具箱首次安装 CAD 或文档翻译器时，下载后必须校验 GitHub SHA-256，使用 Inno 静默安装到工具箱所在 `Honsen Program` 父目录的固定应用子目录；UAC 不能绕过。
 - 不要强制以 Shell `runas` 启动 Inno 安装器：部分 Windows 环境会对该动词报“系统找不到指定的路径”，即使安装包存在且校验无误。直接启动安装器；需要写入 `Program Files` 时由 Inno 自身请求 UAC。
 - 开发目录不属于 `Honsen Program` 时，首次安装测试必须显式设置目标根目录；不得回退到 `bin\\Debug` 等构建目录。
+- .NET 单文件发布不保证 `CopyToOutputDirectory` 内容进入发布目录；运行时读取的 `logo.ico`、`catalog.json`、`honsen.app.json` 必须同时设置 `CopyToPublishDirectory`，并从 ZIP 重新解压后启动验证。`ApplicationIcon` 还要用 Publish target 显式复制；托盘图标缺失时必须降级，不能让主窗口崩溃。
 

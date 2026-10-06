@@ -685,7 +685,8 @@ public partial class MainWindow : Window
         var menu = new Forms.ContextMenuStrip();
         menu.Items.Add(Text("打开界面", "Open", "Ouvrir"), null, (_, _) => ShowFromTray());
         menu.Items.Add(Text("退出工具箱", "Exit Toolbox", "Quitter"), null, (_, _) => { _isExiting = true; _trayIcon.Visible = false; System.Windows.Application.Current.Shutdown(); });
-        var icon = new Forms.NotifyIcon { Icon = new System.Drawing.Icon(Path.Combine(AppContext.BaseDirectory, "logo.ico")), Text = "Honsen工具箱", ContextMenuStrip = menu, Visible = true };
+        var logoPath = Path.Combine(AppContext.BaseDirectory, "logo.ico");
+        var icon = new Forms.NotifyIcon { Icon = File.Exists(logoPath) ? new System.Drawing.Icon(logoPath) : System.Drawing.SystemIcons.Application, Text = "Honsen工具箱", ContextMenuStrip = menu, Visible = true };
         icon.DoubleClick += (_, _) => ShowFromTray();
         return icon;
     }
