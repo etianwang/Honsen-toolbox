@@ -23,6 +23,7 @@
 - 每次影响窗口或交互的修改后：先停止旧的 `HonsenToolbox` 进程，再执行 `dotnet build HonsenToolbox.csproj --configuration Debug`，最后启动 Debug 程序确认窗口存活。
 - 编译通过不代表交互正确。涉及鼠标、键盘、主题、文本输入或弹层时，必须由实际运行的窗口验证。
 - 项目同时引用 WinForms（托盘）和 WPF。遇到 `Point`、`Image`、`GiveFeedbackEventArgs`、`QueryContinueDragEventArgs` 等同名类型时，明确写出 `System.Windows` 或 `System.Windows.Controls` 命名空间，避免歧义。
+- 工具箱代码远端必须双向同步：GitHub `https://github.com/etianwang/Honsen-toolbox.git` 与 Gitee `https://gitee.com/etianwang/honsen-toolbox.git`。每次提交后均推送两个远端的 `main` 分支。
 
 ## 应用识别协议
 
