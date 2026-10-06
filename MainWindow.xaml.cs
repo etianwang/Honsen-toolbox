@@ -103,9 +103,10 @@ public partial class MainWindow : Window
     private static List<ToolEntry> CreateDefaultTools() =>
     [
         Web("terminal", "深圳弘盛·系统终端", "Shenzhen Honsen System Terminal", "Terminal système Honsen Shenzhen", "公司内部系统入口", "Company internal systems", "Portail des systèmes internes", "https://www.honsen.africa/", "⌂", true, 2),
-        Desktop("wms", "仓储管理", "Warehouse Management", "Gestion d'entrepôt", "桌面版与在线查看", "Desktop app and online view", "Application locale et consultation en ligne", "https://github.com/etianwang/Honsen_WMS/releases", "▣", false, 5),
+        Desktop("wms", "Honsen WMS", "Honsen WMS", "Honsen WMS", "本地 LTS 仓储管理客户端", "Local LTS warehouse client", "Client local LTS de gestion d’entrepôt", "https://github.com/etianwang/Honsen_WMS/releases", "▣", false, 5),
+        Web("wms-online", "仓储管理在线查看", "WMS Online Viewer", "Consultation WMS en ligne", "在线只读查看", "Online read-only view", "Consultation en ligne", "https://wms.honsen.africa/", "◫", false, 6),
         Web("edm", "图纸管理", "Drawing Management", "Gestion des plans", "图纸与工程资料", "Drawings and engineering documents", "Plans et documents d'ingénierie", "https://edm.honsen.africa/login", "⌑", false, 7),
-        Web("tracking", "柜号跟踪", "Container Tracking", "Suivi de conteneurs", "当前为网页，后续支持桌面版", "Web service; desktop version planned", "Service Web ; version bureau prévue", "http://tracking.honsen.africa/", "⌁", false, 6),
+        Web("tracking", "柜号跟踪", "Container Tracking", "Suivi de conteneurs", "当前为网页，后续支持桌面版", "Web service; desktop version planned", "Service Web ; version bureau prévue", "http://tracking.honsen.africa/", "⌁", false, 7),
         Web("attendance-cam", "喀麦隆团队考勤", "Cameroon Team Attendance", "Présence équipe Cameroun", "CAM 团队网页", "CAM team web service", "Service Web équipe CAM", "https://kq.honsen.africa/", "◷", false, 8),
         Web("attendance-et", "埃塞俄比亚团队考勤", "Ethiopia Team Attendance", "Présence équipe Éthiopie", "ETH 团队网页", "ETH team web service", "Service Web équipe ETH", "https://kq-et.honsen.africa/", "◷", false, 9),
         Web("drive", "企业网盘", "Company Drive", "Disque d'entreprise", "公司文件存储", "Company file storage", "Stockage des fichiers d'entreprise", "https://p.honsen.africa/", "□", false, 10),

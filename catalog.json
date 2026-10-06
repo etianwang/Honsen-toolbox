@@ -5,9 +5,14 @@
     "Url": "https://www.honsen.africa/", "Icon": "⌂", "IsWeb": true, "IsInstallable": false, "IsFavourite": true, "SortOrder": 2
   },
   {
-    "Id": "wms", "ChineseName": "仓储管理", "EnglishName": "Warehouse Management", "FrenchName": "Gestion d'entrepôt",
-    "ChineseDescription": "桌面版与在线查看", "EnglishDescription": "Desktop app and online view", "FrenchDescription": "Application locale et consultation en ligne",
+    "Id": "wms", "ChineseName": "Honsen WMS", "EnglishName": "Honsen WMS", "FrenchName": "Honsen WMS",
+    "ChineseDescription": "本地 LTS 仓储管理客户端", "EnglishDescription": "Local LTS warehouse client", "FrenchDescription": "Client local LTS de gestion d’entrepôt",
     "Url": "https://github.com/etianwang/Honsen_WMS/releases", "Icon": "▣", "IsWeb": false, "IsInstallable": true, "IsFavourite": false, "SortOrder": 5
+  },
+  {
+    "Id": "wms-online", "ChineseName": "仓储管理在线查看", "EnglishName": "WMS Online Viewer", "FrenchName": "Consultation WMS en ligne",
+    "ChineseDescription": "在线只读查看", "EnglishDescription": "Online read-only view", "FrenchDescription": "Consultation en ligne",
+    "Url": "https://wms.honsen.africa/", "Icon": "◫", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 6
   },
   {
     "Id": "edm", "ChineseName": "图纸管理", "EnglishName": "Drawing Management", "FrenchName": "Gestion des plans",
@@ -17,7 +22,7 @@
   {
     "Id": "tracking", "ChineseName": "柜号跟踪", "EnglishName": "Container Tracking", "FrenchName": "Suivi de conteneurs",
     "ChineseDescription": "当前为网页，后续支持桌面版", "EnglishDescription": "Web service; desktop version planned", "FrenchDescription": "Service Web ; version bureau prévue",
-    "Url": "http://tracking.honsen.africa/", "Icon": "⌁", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 6
+    "Url": "http://tracking.honsen.africa/", "Icon": "⌁", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 7
   },
   {
     "Id": "attendance-cam", "ChineseName": "喀麦隆团队考勤", "EnglishName": "Cameroon Team Attendance", "FrenchName": "Présence équipe Cameroun",
