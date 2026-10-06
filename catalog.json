@@ -1,0 +1,47 @@
+[
+  {
+    "Id": "terminal", "ChineseName": "深圳弘盛·系统终端", "EnglishName": "Shenzhen Honsen System Terminal", "FrenchName": "Terminal système Honsen Shenzhen",
+    "ChineseDescription": "公司内部系统入口", "EnglishDescription": "Company internal systems", "FrenchDescription": "Portail des systèmes internes",
+    "Url": "https://www.honsen.africa/", "Icon": "⌂", "IsWeb": true, "IsInstallable": false, "IsFavourite": true, "SortOrder": 2
+  },
+  {
+    "Id": "wms", "ChineseName": "仓储管理", "EnglishName": "Warehouse Management", "FrenchName": "Gestion d'entrepôt",
+    "ChineseDescription": "桌面版与在线查看", "EnglishDescription": "Desktop app and online view", "FrenchDescription": "Application locale et consultation en ligne",
+    "Url": "https://github.com/etianwang/Honsen_WMS/releases", "Icon": "▣", "IsWeb": false, "IsInstallable": true, "IsFavourite": false, "SortOrder": 5
+  },
+  {
+    "Id": "edm", "ChineseName": "图纸管理", "EnglishName": "Drawing Management", "FrenchName": "Gestion des plans",
+    "ChineseDescription": "图纸与工程资料", "EnglishDescription": "Drawings and engineering documents", "FrenchDescription": "Plans et documents d'ingénierie",
+    "Url": "https://edm.honsen.africa/login", "Icon": "⌑", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 7
+  },
+  {
+    "Id": "tracking", "ChineseName": "柜号跟踪", "EnglishName": "Container Tracking", "FrenchName": "Suivi de conteneurs",
+    "ChineseDescription": "当前为网页，后续支持桌面版", "EnglishDescription": "Web service; desktop version planned", "FrenchDescription": "Service Web ; version bureau prévue",
+    "Url": "http://tracking.honsen.africa/", "Icon": "⌁", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 6
+  },
+  {
+    "Id": "attendance-cam", "ChineseName": "喀麦隆团队考勤", "EnglishName": "Cameroon Team Attendance", "FrenchName": "Présence équipe Cameroun",
+    "ChineseDescription": "CAM 团队网页", "EnglishDescription": "CAM team web service", "FrenchDescription": "Service Web équipe CAM",
+    "Url": "https://kq.honsen.africa/", "Icon": "◷", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 8
+  },
+  {
+    "Id": "attendance-et", "ChineseName": "埃塞俄比亚团队考勤", "EnglishName": "Ethiopia Team Attendance", "FrenchName": "Présence équipe Éthiopie",
+    "ChineseDescription": "ETH 团队网页", "EnglishDescription": "ETH team web service", "FrenchDescription": "Service Web équipe ETH",
+    "Url": "https://kq-et.honsen.africa/", "Icon": "◷", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 9
+  },
+  {
+    "Id": "drive", "ChineseName": "企业网盘", "EnglishName": "Company Drive", "FrenchName": "Disque d'entreprise",
+    "ChineseDescription": "公司文件存储", "EnglishDescription": "Company file storage", "FrenchDescription": "Stockage des fichiers d'entreprise",
+    "Url": "https://p.honsen.africa/", "Icon": "□", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 10
+  },
+  {
+    "Id": "cad-translator", "ChineseName": "Honsen CAD中英法图纸翻译器", "EnglishName": "Honsen CAD Drawing Translator", "FrenchName": "Traducteur de plans CAD Honsen",
+    "ChineseDescription": "中英法 CAD 图纸翻译", "EnglishDescription": "Chinese, English and French CAD translation", "FrenchDescription": "Traduction CAD chinois, anglais et français",
+    "Url": "https://github.com/etianwang/CAD_translator/releases", "Icon": "文", "AppId": "honsen.cad-translator", "IsWeb": false, "IsInstallable": true, "IsFavourite": true, "SortOrder": 0
+  },
+  {
+    "Id": "document-translator", "ChineseName": "Honsen文档翻译器", "EnglishName": "Honsen Document Translator", "FrenchName": "Traducteur de documents Honsen",
+    "ChineseDescription": "中英法文档翻译", "EnglishDescription": "Chinese, English and French document translation", "FrenchDescription": "Traduction de documents chinois, anglais et français",
+    "Url": "https://github.com/etianwang/Honsen-Document-Translator/releases", "Icon": "▤", "AppId": "honsen.document-translator", "IsWeb": false, "IsInstallable": true, "IsFavourite": true, "SortOrder": 1
+  }
+]
