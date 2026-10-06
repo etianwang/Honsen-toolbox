@@ -41,6 +41,7 @@ ExecutablePath
 InstallScope                 # machine 或 user
 Publisher                    # Honsen
 UpdateManifestUrl
+LauncherPath
 UpdateRunnerPath
 ```
 
@@ -79,8 +80,8 @@ UpdateRunnerPath
 
 1. 校验更新包 SHA-256。
 2. 校验 `appId`、注册表、`honsen.app.json` 与目标目录一致。
-3. 等待指定主程序 PID 真正结束；禁止固定延时或强制关闭后立即安装。
-4. 使用管理员权限运行安装器。
+3. 先等待指定主程序 PID 正常退出最多 30 秒；仅当该 PID 的 exe 路径严格等于注册表 `ExecutablePath` 时，才可结束该进程。路径不符、仍无法结束或超时后仍在运行均必须失败。
+4. Runner 自己负责在需要权限时以 UAC 启动安装器；不得依赖主程序或工具箱已提权。
 5. 等待安装器完成，检查退出码和安装日志。
 6. 验证新版本注册表、`honsen.app.json` 和主 exe 文件版本。
 7. 为同一 `appId` 使用命名互斥锁或锁文件，禁止并发更新。
@@ -126,7 +127,9 @@ HonsenUpdateRunner.exe apply \
   --sha256 "<SHA-256>" \
   --target-dir "<当前应用真实安装目录>" \
   --expected-version "<目标版本>" \
-  --restart true
+  --restart true \
+  --operation-id "<GUID>" \
+  --result-path "%LOCALAPPDATA%\\Honsen Program\\UpdateResults\\<appId>\\<GUID>.json"
 ```
 
 ### 6.2 Honsen工具箱发起更新
@@ -149,29 +152,39 @@ HonsenUpdateRunner.exe apply \
   --sha256 "<SHA-256>" \
   --target-dir "<注册表中的 InstallLocation>" \
   --expected-version "<目标版本>" \
-  --restart false
+  --restart false \
+  --operation-id "<GUID>" \
+  --result-path "%LOCALAPPDATA%\\Honsen Program\\UpdateResults\\<appId>\\<GUID>.json"
 ```
 
-`--source` 只记录更新来源；两种入口的校验、替换和成功判定必须完全相同。
+`--source` 只能记录更新来源（`app` 或 `toolbox`），不得作为权限判断或限制某一调用方的依据；两种入口的校验、替换和成功判定必须完全相同。
 
 ## 7. 更新结果回传
 
-更新助手必须将结果写入：
+每次操作必须由调用方传入唯一 `operationId` 和独立 `result-path`。默认目录约定为：
 
 ```text
-%LOCALAPPDATA%\Honsen Program\UpdateResults\<appId>.json
+%LOCALAPPDATA%\Honsen Program\UpdateResults\<appId>\<operationId>.json
 ```
+
+Runner 只能写入本次调用指定的 `result-path`，工具箱也只能读取自己传入的该文件；禁止依赖固定共享结果文件，避免并发操作互相覆盖。
 
 成功示例：
 
 ```json
 {
   "appId": "honsen.cad-translator",
+  "operationId": "0f3b2a90-34c4-4d99-bd17-a964da43f6a6",
   "status": "success",
+  "source": "toolbox",
   "fromVersion": "1.9.9",
   "toVersion": "1.10.0",
   "installLocation": "C:\\Honsen\\CAD Translate",
   "executablePath": "C:\\Honsen\\CAD Translate\\Honsen DrawTranslate.exe",
+  "step": null,
+  "installerExitCode": 0,
+  "installerLogPath": "C:\\Users\\...\\cad-update.log",
+  "message": "更新完成",
   "completedAtUtc": "2026-10-05T10:00:00Z"
 }
 ```
@@ -181,12 +194,20 @@ HonsenUpdateRunner.exe apply \
 ```json
 {
   "appId": "honsen.cad-translator",
+  "operationId": "0f3b2a90-34c4-4d99-bd17-a964da43f6a6",
   "status": "failed",
+  "source": "toolbox",
+  "fromVersion": "1.9.9",
+  "toVersion": "1.10.0",
   "step": "installer-exit",
   "installerExitCode": 5,
-  "installerLogPath": "C:\\Users\\...\\cad-update.log"
+  "installerLogPath": "C:\\Users\\...\\cad-update.log",
+  "message": "安装器退出码非零",
+  "completedAtUtc": "2026-10-05T10:00:00Z"
 }
 ```
+
+字段名固定使用 `step`、`installerExitCode`、`installerLogPath`、`message`；不得改为同义字段。成功与失败均必须包含 `appId`、`operationId`、`status`、`source`、`fromVersion`、`toVersion` 和 `completedAtUtc`。
 
 工具箱只能根据结果文件和更新后的注册表显示成功或失败，不能在启动安装器后直接假定更新成功。
 

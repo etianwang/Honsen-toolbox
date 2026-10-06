@@ -6,9 +6,11 @@ Honsen 工具箱是面向 Windows 10/11 的内部桌面入口。它统一打开�
 
 任何需要接入 Honsen 工具箱的项目（CAD 翻译器、文档翻译器、WMS 或后续桌面应用）开始改动前，必须按顺序阅读：
 
-1. 本 README 的“跨项目固定约定”。
+1. [跨项目 Agent 上下文](docs/agent-context.md)。
 2. [桌面应用安装与更新协议](docs/honsen-desktop-update-protocol.md)。
-3. 与自身应用相同类型的已发布实现和其 `HONSEN_TOOLBOX_INTEGRATION.md`（如存在）。
+3. [工具箱接入契约](docs/toolbox-integration-contract.md)。
+4. [honsen.app.json Schema](docs/schemas/honsen.app.schema.json)。
+5. 与自身应用相同类型的已发布实现和其 `HONSEN_TOOLBOX_INTEGRATION.md`（如存在）。
 
 本仓库的 `docs/honsen-desktop-update-protocol.md` 是跨项目唯一事实源。不得自行发明或修改 `appId`、注册表路径、`honsen.app.json` 字段、Runner 参数、结果 JSON、安装目录规则或卸载边界。遇到冲突先报告，再修改协议和所有相关项目。
 

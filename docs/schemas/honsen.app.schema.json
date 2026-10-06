@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/etianwang/Honsen-toolbox/blob/main/docs/schemas/honsen.app.schema.json",
+  "title": "Honsen Desktop Application Manifest",
+  "type": "object",
+  "required": ["schemaVersion", "appId", "displayName", "version", "executable", "updateRunner", "publisher", "updateManifestUrl"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "appId": { "type": "string", "pattern": "^honsen\\.[a-z0-9-]+$" },
+    "displayName": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$" },
+    "executable": { "type": "string", "pattern": "^[^\\\\/:*?\\\"<>|]+\\.exe$" },
+    "updateRunner": { "const": "HonsenUpdateRunner.exe" },
+    "publisher": { "const": "Honsen" },
+    "updateManifestUrl": { "type": "string", "format": "uri" }
+  },
+  "additionalProperties": true
+}
