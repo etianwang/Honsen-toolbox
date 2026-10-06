@@ -110,8 +110,8 @@ public partial class MainWindow : Window
         Web("attendance-cam", "喀麦隆团队考勤", "Cameroon Team Attendance", "Présence équipe Cameroun", "CAM 团队网页", "CAM team web service", "Service Web équipe CAM", "https://kq.honsen.africa/", "◷", false, 8),
         Web("attendance-et", "埃塞俄比亚团队考勤", "Ethiopia Team Attendance", "Présence équipe Éthiopie", "ETH 团队网页", "ETH team web service", "Service Web équipe ETH", "https://kq-et.honsen.africa/", "◷", false, 9),
         Web("drive", "企业网盘", "Company Drive", "Disque d'entreprise", "公司文件存储", "Company file storage", "Stockage des fichiers d'entreprise", "https://p.honsen.africa/", "□", false, 10),
-        Desktop("cad-translator", "Honsen CAD 中英法图纸翻译器", "Honsen CAD Drawing Translator", "Traducteur de plans CAD Honsen", "中英法 CAD 图纸翻译", "Chinese, English and French CAD translation", "Traduction CAD chinois, anglais et français", "https://github.com/etianwang/CAD_translator/releases", "文", true, 0),
-        Desktop("document-translator", "Honsen 文档翻译器", "Honsen Document Translator", "Traducteur de documents Honsen", "中英法文档翻译", "Chinese, English and French document translation", "Traduction de documents chinois, anglais et français", "https://github.com/etianwang/Honsen-Document-Translator/releases", "▤", true, 1),
+        Desktop("cad-translator", "图纸翻译器", "Honsen CAD Drawing Translator", "Traducteur de plans CAD Honsen", "中英法 CAD 图纸翻译", "Chinese, English and French CAD translation", "Traduction CAD chinois, anglais et français", "https://github.com/etianwang/CAD_translator/releases", "文", true, 0),
+        Desktop("document-translator", "万能文档翻译器", "Honsen Document Translator", "Traducteur de documents Honsen", "中英法文档翻译", "Chinese, English and French document translation", "Traduction de documents chinois, anglais et français", "https://github.com/etianwang/Honsen-Document-Translator/releases", "▤", true, 1),
     ];
 
     private static ToolEntry Web(string id, string zh, string en, string fr, string zhDesc, string enDesc, string frDesc, string url, string icon, bool favourite, int order) =>

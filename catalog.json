@@ -40,12 +40,12 @@
     "Url": "https://p.honsen.africa/", "Icon": "□", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 10
   },
   {
-    "Id": "cad-translator", "ChineseName": "Honsen CAD中英法图纸翻译器", "EnglishName": "Honsen CAD Drawing Translator", "FrenchName": "Traducteur de plans CAD Honsen",
+    "Id": "cad-translator", "ChineseName": "图纸翻译器", "EnglishName": "Honsen CAD Drawing Translator", "FrenchName": "Traducteur de plans CAD Honsen",
     "ChineseDescription": "中英法 CAD 图纸翻译", "EnglishDescription": "Chinese, English and French CAD translation", "FrenchDescription": "Traduction CAD chinois, anglais et français",
     "Url": "https://github.com/etianwang/CAD_translator/releases", "Icon": "文", "AppId": "honsen.cad-translator", "IsWeb": false, "IsInstallable": true, "IsFavourite": true, "SortOrder": 0
   },
   {
-    "Id": "document-translator", "ChineseName": "Honsen文档翻译器", "EnglishName": "Honsen Document Translator", "FrenchName": "Traducteur de documents Honsen",
+    "Id": "document-translator", "ChineseName": "万能文档翻译器", "EnglishName": "Honsen Document Translator", "FrenchName": "Traducteur de documents Honsen",
     "ChineseDescription": "中英法文档翻译", "EnglishDescription": "Chinese, English and French document translation", "FrenchDescription": "Traduction de documents chinois, anglais et français",
     "Url": "https://github.com/etianwang/Honsen-Document-Translator/releases", "Icon": "▤", "AppId": "honsen.document-translator", "IsWeb": false, "IsInstallable": true, "IsFavourite": true, "SortOrder": 1
   }
