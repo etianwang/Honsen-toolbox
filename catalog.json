@@ -5,12 +5,12 @@
     "Url": "https://www.honsen.africa/", "Icon": "⌂", "IsWeb": true, "IsInstallable": false, "IsFavourite": true, "SortOrder": 2
   },
   {
-    "Id": "wms", "ChineseName": "Honsen WMS", "EnglishName": "Honsen WMS", "FrenchName": "Honsen WMS",
+    "Id": "wms", "ChineseName": "仓库管理", "EnglishName": "Honsen WMS", "FrenchName": "Honsen WMS",
     "ChineseDescription": "本地 LTS 仓储管理客户端", "EnglishDescription": "Local LTS warehouse client", "FrenchDescription": "Client local LTS de gestion d’entrepôt",
     "Url": "https://github.com/etianwang/Honsen_WMS/releases", "Icon": "▣", "IsWeb": false, "IsInstallable": true, "IsFavourite": false, "SortOrder": 5
   },
   {
-    "Id": "wms-online", "ChineseName": "仓储管理在线查看", "EnglishName": "WMS Online Viewer", "FrenchName": "Consultation WMS en ligne",
+    "Id": "wms-online", "ChineseName": "仓库数据在线查看", "EnglishName": "WMS Online Viewer", "FrenchName": "Consultation WMS en ligne",
     "ChineseDescription": "在线只读查看", "EnglishDescription": "Online read-only view", "FrenchDescription": "Consultation en ligne",
     "Url": "https://wms.honsen.africa/", "Icon": "◫", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 6
   },

@@ -103,8 +103,8 @@ public partial class MainWindow : Window
     private static List<ToolEntry> CreateDefaultTools() =>
     [
         Web("terminal", "深圳弘盛·系统终端", "Shenzhen Honsen System Terminal", "Terminal système Honsen Shenzhen", "公司内部系统入口", "Company internal systems", "Portail des systèmes internes", "https://www.honsen.africa/", "⌂", true, 2),
-        Desktop("wms", "Honsen WMS", "Honsen WMS", "Honsen WMS", "本地 LTS 仓储管理客户端", "Local LTS warehouse client", "Client local LTS de gestion d’entrepôt", "https://github.com/etianwang/Honsen_WMS/releases", "▣", false, 5),
-        Web("wms-online", "仓储管理在线查看", "WMS Online Viewer", "Consultation WMS en ligne", "在线只读查看", "Online read-only view", "Consultation en ligne", "https://wms.honsen.africa/", "◫", false, 6),
+        Desktop("wms", "仓库管理", "Honsen WMS", "Honsen WMS", "本地 LTS 仓储管理客户端", "Local LTS warehouse client", "Client local LTS de gestion d’entrepôt", "https://github.com/etianwang/Honsen_WMS/releases", "▣", false, 5),
+        Web("wms-online", "仓库数据在线查看", "WMS Online Viewer", "Consultation WMS en ligne", "在线只读查看", "Online read-only view", "Consultation en ligne", "https://wms.honsen.africa/", "◫", false, 6),
         Web("edm", "图纸管理", "Drawing Management", "Gestion des plans", "图纸与工程资料", "Drawings and engineering documents", "Plans et documents d'ingénierie", "https://edm.honsen.africa/login", "⌑", false, 7),
         Web("tracking", "柜号跟踪", "Container Tracking", "Suivi de conteneurs", "当前为网页，后续支持桌面版", "Web service; desktop version planned", "Service Web ; version bureau prévue", "http://tracking.honsen.africa/", "⌁", false, 7),
         Web("attendance-cam", "喀麦隆团队考勤", "Cameroon Team Attendance", "Présence équipe Cameroun", "CAM 团队网页", "CAM team web service", "Service Web équipe CAM", "https://kq.honsen.africa/", "◷", false, 8),
