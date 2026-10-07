@@ -1,6 +1,6 @@
 # Honsen 工具箱接入契约
 
-本文件定义新 Windows 桌面应用被 Honsen 工具箱识别与调用的最小条件；更新细节以 [桌面应用安装与更新协议](honsen-desktop-update-protocol.md) 为准。
+本文件定义新 Windows 桌面应用被 Honsen 工具箱识别与调用的最小条件；所有应用的目录、安装器、注册表、Manifest、Runner 与发布规范以 [Honsen Windows 应用统一规范](HONSEN_WINDOWS_APPLICATION_STANDARD.md) 为准，更新细节以 [桌面应用安装与更新协议](honsen-desktop-update-protocol.md) 为准。
 
 ## 应用必须交付
 

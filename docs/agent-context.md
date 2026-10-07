@@ -3,9 +3,10 @@
 ## 必读顺序
 
 1. [README](../README.md)
-2. [桌面应用安装与更新协议](honsen-desktop-update-protocol.md)
-3. [工具箱接入契约](toolbox-integration-contract.md)
-4. [honsen.app.json Schema](schemas/honsen.app.schema.json)
+2. [Honsen Windows 应用统一规范](HONSEN_WINDOWS_APPLICATION_STANDARD.md)
+3. [桌面应用安装与更新协议](honsen-desktop-update-protocol.md)
+4. [工具箱接入契约](toolbox-integration-contract.md)
+5. [honsen.app.json Schema](schemas/honsen.app.schema.json)
 
 本目录是 Honsen Windows 桌面应用的唯一跨项目规范。实现与文档冲突时，先报告；不得自行选择另一套字段、路径或参数。
 

@@ -88,17 +88,18 @@ HKLM\Software\Honsen Program\Apps\<appId>
 - 每次 `apply` 必须传唯一 `operationId` 与 `resultPath`；工具箱只读取自己创建的结果文件。
 - LTS 应用（例如 WMS）默认不显性提示更新，必须由用户手动发起并二次确认。
 
-完整的字段、Runner 参数、结果 JSON 和安全流程以 [桌面应用安装与更新协议](docs/honsen-desktop-update-protocol.md) 为唯一事实源。
+目录、安装器、注册表、Manifest、发布与安全边界以 [Honsen Windows 应用统一规范](docs/HONSEN_WINDOWS_APPLICATION_STANDARD.md) 为准；Runner 参数、结果 JSON 与更新流程以 [桌面应用安装与更新协议](docs/honsen-desktop-update-protocol.md) 为准。
 
 ## 给其他项目 Agent 的接入入口
 
 需要接入工具箱的项目（CAD 翻译器、万能文档翻译器、WMS 和后续桌面应用）开始改动前，必须依次阅读：
 
 1. [跨项目 Agent 上下文](docs/agent-context.md)
-2. [桌面应用安装与更新协议](docs/honsen-desktop-update-protocol.md)
-3. [工具箱接入契约](docs/toolbox-integration-contract.md)
-4. [honsen.app.json Schema](docs/schemas/honsen.app.schema.json)
-5. 同类已发布应用的 `docs/HONSEN_TOOLBOX_INTEGRATION.md`（如存在）
+2. [Honsen Windows 应用统一规范](docs/HONSEN_WINDOWS_APPLICATION_STANDARD.md)
+3. [桌面应用安装与更新协议](docs/honsen-desktop-update-protocol.md)
+4. [工具箱接入契约](docs/toolbox-integration-contract.md)
+5. [honsen.app.json Schema](docs/schemas/honsen.app.schema.json)
+6. 同类已发布应用的 `docs/HONSEN_TOOLBOX_INTEGRATION.md`（如存在）
 
 不得自行发明或改变 `appId`、注册表路径、`honsen.app.json` 字段、Runner 参数、结果 JSON、安装目录规则或卸载边界。发现冲突时先报告，再统一更新协议和关联项目。
 
