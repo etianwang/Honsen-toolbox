@@ -7,7 +7,7 @@
   {
     "Id": "wms", "ChineseName": "仓库管理", "EnglishName": "Honsen WMS", "FrenchName": "Honsen WMS",
     "ChineseDescription": "本地 LTS 仓储管理客户端", "EnglishDescription": "Local LTS warehouse client", "FrenchDescription": "Client local LTS de gestion d’entrepôt",
-    "Url": "https://github.com/etianwang/Honsen_WMS/releases", "Icon": "▣", "IsWeb": false, "IsInstallable": true, "IsFavourite": false, "SortOrder": 5
+    "Url": "https://github.com/etianwang/Honsen-WMS/releases", "Icon": "▣", "AppId": "honsen.wms", "IsWeb": false, "IsInstallable": true, "IsFavourite": false, "SortOrder": 5
   },
   {
     "Id": "wms-online", "ChineseName": "仓库数据在线查看", "EnglishName": "WMS Online Viewer", "FrenchName": "Consultation WMS en ligne",

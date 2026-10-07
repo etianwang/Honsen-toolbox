@@ -118,7 +118,7 @@ public partial class MainWindow : Window
         new() { Id = id, ChineseName = zh, EnglishName = en, FrenchName = fr, ChineseDescription = zhDesc, EnglishDescription = enDesc, FrenchDescription = frDesc, Url = url, Icon = icon, IsWeb = true, IsInstallable = false, IsFavourite = favourite, SortOrder = order };
 
     private static ToolEntry Desktop(string id, string zh, string en, string fr, string zhDesc, string enDesc, string frDesc, string url, string icon, bool favourite, int order) =>
-        new() { Id = id, ChineseName = zh, EnglishName = en, FrenchName = fr, ChineseDescription = zhDesc, EnglishDescription = enDesc, FrenchDescription = frDesc, Url = url, Icon = icon, AppId = id switch { "cad-translator" => "honsen.cad-translator", "document-translator" => "honsen.document-translator", _ => null }, IsWeb = false, IsInstallable = true, IsFavourite = favourite, SortOrder = order };
+        new() { Id = id, ChineseName = zh, EnglishName = en, FrenchName = fr, ChineseDescription = zhDesc, EnglishDescription = enDesc, FrenchDescription = frDesc, Url = url, Icon = icon, AppId = id switch { "cad-translator" => "honsen.cad-translator", "document-translator" => "honsen.document-translator", "wms" => "honsen.wms", _ => null }, IsWeb = false, IsInstallable = true, IsFavourite = favourite, SortOrder = order };
 
     private void DiscoverConnectedApps()
     {

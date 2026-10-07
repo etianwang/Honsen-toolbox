@@ -27,7 +27,7 @@ Honsen 工具箱是 Honsen 面向 Windows 10/11 的内部桌面入口。它把�
 | 图纸翻译器 | 桌面应用，`honsen.cad-translator` | [GitHub Releases](https://github.com/etianwang/CAD_translator/releases) |
 | 万能文档翻译器 | 桌面应用，`honsen.document-translator` | [GitHub Releases](https://github.com/etianwang/Honsen-Document-Translator/releases) |
 
-WMS 的应用身份预留为 `honsen.wms`；待其按桌面应用协议接入 Runner 后，工具箱可像两个翻译器一样识别、安装、启动、检查更新和卸载它。
+WMS 使用 `honsen.wms`，并按 LTS 策略接入：工具箱可识别已安装实例、启动、检查版本、打开安装目录和卸载；首次安装暂跳转其 Release 页面，更新必须由用户手动发起并二次确认。
 
 ## 已实现功能
 
@@ -121,4 +121,4 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 - 工具箱自身的在线检查与静默更新
 - 错误日志上传与服务端接收工具
 - GitHub 访问失败时自动切换至 Gitee 或 `update.honsen.africa`
-- WMS 的 Runner 接入和由工具箱完成的安装/更新/卸载
+- WMS 的首次自动下载与静默安装
