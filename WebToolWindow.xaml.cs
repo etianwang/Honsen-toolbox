@@ -66,7 +66,7 @@ public partial class WebToolWindow : Window
         var title = new TextBlock { Text = _toolTitle, MaxWidth = 150, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
         var tab = new TabItem { Tag = browser, Content = browser };
         var closeText = Text("关闭标签页", "Close tab", "Fermer l’onglet");
-        var close = new System.Windows.Controls.Button { Content = "×", Tag = tab, Padding = new Thickness(5, 0, 5, 0), ToolTip = closeText };
+        var close = new System.Windows.Controls.Button { Content = "×", Tag = tab, Padding = new Thickness(5, 0, 5, 0), ToolTip = closeText, FocusVisualStyle = null };
         System.Windows.Automation.AutomationProperties.SetName(close, closeText);
         close.Click += CloseTab_Click;
         var header = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal };

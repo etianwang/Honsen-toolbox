@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "appId": "honsen.toolbox",
   "displayName": "Honsen工具箱",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "executable": "HonsenToolbox.exe",
   "publisher": "Honsen",
   "updateManifestUrl": ""

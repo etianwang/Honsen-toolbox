@@ -222,10 +222,10 @@ public partial class MainWindow : Window
         if (string.IsNullOrWhiteSpace(query))
         {
             if (_page == "favourites") displayed = displayed.Where(tool => tool.IsFavourite);
-            if (_page == "install") displayed = displayed.Where(tool => tool.IsInstallable);
             if (_page == "updates") displayed = displayed.Where(tool => tool.HasConnectedRunner);
         }
         else displayed = displayed.Where(tool => Matches(tool, query));
+        if (_page == "install") displayed = displayed.Where(tool => tool.IsInstallable && !tool.HasConnectedRunner);
 
         foreach (var tool in displayed)
         {

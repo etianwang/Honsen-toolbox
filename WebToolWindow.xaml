@@ -6,11 +6,11 @@
   <DockPanel>
     <Border DockPanel.Dock="Top" Background="{DynamicResource Surface.Nav}" BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,0,0,1" Padding="16,10">
       <DockPanel LastChildFill="True">
-        <Button x:Name="DefaultBrowserButton" DockPanel.Dock="Right" Click="OpenInDefaultBrowser_Click" Padding="12,5" Background="{DynamicResource Brand}" Foreground="White" />
-        <Button x:Name="InstallRuntimeButton" DockPanel.Dock="Right" Click="InstallRuntime_Click" Margin="0,0,8,0" Padding="12,5" Visibility="Collapsed">安装网页运行时</Button>
-        <Button x:Name="ReloadButton" DockPanel.Dock="Right" Click="Reload_Click" Margin="0,0,8,0" FontFamily="Segoe MDL2 Assets" FontSize="12">&#xE72C;</Button>
-        <Button x:Name="ForwardButton" DockPanel.Dock="Right" Click="Forward_Click" FontFamily="Segoe MDL2 Assets" FontSize="12">&#xE72A;</Button>
-        <Button x:Name="BackButton" DockPanel.Dock="Right" Click="Back_Click" FontFamily="Segoe MDL2 Assets" FontSize="12">&#xE72B;</Button>
+        <Button x:Name="DefaultBrowserButton" DockPanel.Dock="Right" Click="OpenInDefaultBrowser_Click" Padding="12,5" Background="{DynamicResource Brand}" Foreground="White" FocusVisualStyle="{x:Null}" />
+        <Button x:Name="InstallRuntimeButton" DockPanel.Dock="Right" Click="InstallRuntime_Click" Margin="0,0,8,0" Padding="12,5" Visibility="Collapsed" FocusVisualStyle="{x:Null}">安装网页运行时</Button>
+        <Button x:Name="ReloadButton" DockPanel.Dock="Right" Click="Reload_Click" Margin="0,0,8,0" FontFamily="Segoe MDL2 Assets" FontSize="12" FocusVisualStyle="{x:Null}">&#xE72C;</Button>
+        <Button x:Name="ForwardButton" DockPanel.Dock="Right" Click="Forward_Click" FontFamily="Segoe MDL2 Assets" FontSize="12" FocusVisualStyle="{x:Null}">&#xE72A;</Button>
+        <Button x:Name="BackButton" DockPanel.Dock="Right" Click="Back_Click" FontFamily="Segoe MDL2 Assets" FontSize="12" FocusVisualStyle="{x:Null}">&#xE72B;</Button>
         <StackPanel>
           <TextBlock x:Name="PageTitle" FontWeight="SemiBold" />
           <TextBlock x:Name="AddressText" Foreground="{DynamicResource Text.Muted}" FontSize="11" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
