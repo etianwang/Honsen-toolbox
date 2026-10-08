@@ -22,7 +22,7 @@
   {
     "Id": "tracking", "ChineseName": "柜号跟踪", "EnglishName": "Container Tracking", "FrenchName": "Suivi de conteneurs",
     "ChineseDescription": "当前为网页，后续支持桌面版", "EnglishDescription": "Web service; desktop version planned", "FrenchDescription": "Service Web ; version bureau prévue",
-    "Url": "http://tracking.honsen.africa/", "Icon": "⌁", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 7
+    "Url": "https://tracking.honsen.africa/", "Icon": "⌁", "IsWeb": true, "IsInstallable": false, "IsFavourite": false, "SortOrder": 7
   },
   {
     "Id": "attendance-cam", "ChineseName": "喀麦隆团队考勤", "EnglishName": "Cameroon Team Attendance", "FrenchName": "Présence équipe Cameroun",

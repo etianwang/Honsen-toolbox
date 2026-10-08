@@ -3,18 +3,27 @@
                     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
   <FontFamily x:Key="Font.Sans">Microsoft YaHei UI, Segoe UI Variable, Segoe UI, Arial</FontFamily>
   <FontFamily x:Key="Font.Serif">Georgia, Microsoft YaHei</FontFamily>
-  <SolidColorBrush x:Key="Surface.App" Color="#F4F3EE" po:Freeze="False" />
-  <SolidColorBrush x:Key="Surface.Nav" Color="#E8E7E1" po:Freeze="False" />
+  <SolidColorBrush x:Key="Surface.App" Color="#F5F8FB" po:Freeze="False" />
+  <SolidColorBrush x:Key="Surface.Nav" Color="#EEF4F8" po:Freeze="False" />
   <SolidColorBrush x:Key="Surface.Card" Color="#FFFFFF" po:Freeze="False" />
-  <SolidColorBrush x:Key="Surface.Selected" Color="#D1E0D6" po:Freeze="False" />
-  <SolidColorBrush x:Key="Surface.Hover" Color="#EDF4EF" po:Freeze="False" />
-  <SolidColorBrush x:Key="Text.Primary" Color="#242925" po:Freeze="False" />
-  <SolidColorBrush x:Key="Text.Secondary" Color="#59625B" po:Freeze="False" />
-  <SolidColorBrush x:Key="Text.Muted" Color="#6C726D" po:Freeze="False" />
-  <SolidColorBrush x:Key="Brand" Color="#246047" po:Freeze="False" />
-  <SolidColorBrush x:Key="Border" Color="#C8CAC2" po:Freeze="False" />
-  <SolidColorBrush x:Key="Border.Subtle" Color="#D7D7D0" po:Freeze="False" />
+  <SolidColorBrush x:Key="Surface.Selected" Color="#CFEDE2" po:Freeze="False" />
+  <SolidColorBrush x:Key="Surface.Hover" Color="#E7F0EC" po:Freeze="False" />
+  <SolidColorBrush x:Key="Text.Primary" Color="#1F2937" po:Freeze="False" />
+  <SolidColorBrush x:Key="Text.Secondary" Color="#64748B" po:Freeze="False" />
+  <SolidColorBrush x:Key="Text.Muted" Color="#94A3B8" po:Freeze="False" />
+  <SolidColorBrush x:Key="Brand" Color="#0B8F66" po:Freeze="False" />
+  <SolidColorBrush x:Key="Border" Color="#D9E3EC" po:Freeze="False" />
+  <SolidColorBrush x:Key="Border.Subtle" Color="#E5ECF2" po:Freeze="False" />
+  <SolidColorBrush x:Key="Accent.Warning" Color="#E6A21A" po:Freeze="False" />
   <SolidColorBrush x:Key="Focus" Color="#135F9F" po:Freeze="False" />
+  <SolidColorBrush x:Key="TitleBar.Background" Color="#F5F8FB" po:Freeze="False" />
+  <SolidColorBrush x:Key="TitleBar.Foreground" Color="#1F2937" po:Freeze="False" />
+  <SolidColorBrush x:Key="Caption.Button.Hover" Color="#E2E5E0" po:Freeze="False" />
+  <SolidColorBrush x:Key="Caption.Button.Pressed" Color="#D3D8D3" po:Freeze="False" />
+  <SolidColorBrush x:Key="Caption.Close.Hover" Color="#C42B1C" po:Freeze="False" />
+  <SolidColorBrush x:Key="Caption.Close.Pressed" Color="#A5261A" po:Freeze="False" />
+  <SolidColorBrush x:Key="Caption.Close.Foreground" Color="#FFFFFF" po:Freeze="False" />
+  <Color x:Key="Window.Shadow.Color">#2B000000</Color>
 
   <Style TargetType="Button">
     <Setter Property="FontFamily" Value="{StaticResource Font.Sans}" />

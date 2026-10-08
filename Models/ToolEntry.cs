@@ -23,6 +23,8 @@ public sealed class ToolEntry
     public string DisplayFavouriteSymbol { get; set; } = "☆";
     public string DisplayActionText { get; set; } = "打开 ↗";
     public string DisplayVersionInfo { get; set; } = "";
+    public string DisplayToolTip { get; set; } = "";
+    public string DisplayFavouriteToolTip { get; set; } = "";
     public string? InstalledVersion { get; set; }
     public string? LauncherPath { get; set; }
     public string? UpdateManifestUrl { get; set; }

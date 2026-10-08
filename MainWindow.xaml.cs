@@ -32,8 +32,10 @@ public partial class MainWindow : Window
     private string? _installStatus;
     private int? _installProgress;
     private readonly Forms.NotifyIcon _trayIcon;
+    private readonly Forms.ContextMenuStrip _trayMenu = new();
     private string _page = "favourites";
     private string _language = "zh";
+    private bool _isDarkTheme;
     private bool _isExiting;
     private ToolEntry? _draggedTool;
     private FrameworkElement? _dragSource;
@@ -49,12 +51,14 @@ public partial class MainWindow : Window
         _dragHoldTimer.Tick += DragHoldTimer_Tick;
         RegisterToolbox();
         LoadState();
+        ApplyTheme(_isDarkTheme);
         DiscoverConnectedApps();
         _trayIcon = CreateTrayIcon();
         ApplyLanguage();
         RefreshTools();
         UpdateNetworkStatus();
         SetAutostart(AutostartBox.IsChecked == true);
+        UpdateCaptionButtons();
     }
 
     private static List<ToolEntry> LoadCatalog()
@@ -72,7 +76,7 @@ public partial class MainWindow : Window
     private static HttpClient CreateGitHubClient()
     {
         var client = new HttpClient();
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("HonsenToolbox/0.1");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("HonsenToolbox/1.0");
         return client;
     }
 
@@ -106,7 +110,7 @@ public partial class MainWindow : Window
         Desktop("wms", "仓库管理", "Honsen WMS", "Honsen WMS", "本地 LTS 仓储管理客户端", "Local LTS warehouse client", "Client local LTS de gestion d’entrepôt", "https://github.com/etianwang/Honsen_WMS/releases", "▣", false, 5),
         Web("wms-online", "仓库数据在线查看", "WMS Online Viewer", "Consultation WMS en ligne", "在线只读查看", "Online read-only view", "Consultation en ligne", "https://wms.honsen.africa/", "◫", false, 6),
         Web("edm", "图纸管理", "Drawing Management", "Gestion des plans", "图纸与工程资料", "Drawings and engineering documents", "Plans et documents d'ingénierie", "https://edm.honsen.africa/login", "⌑", false, 7),
-        Web("tracking", "柜号跟踪", "Container Tracking", "Suivi de conteneurs", "当前为网页，后续支持桌面版", "Web service; desktop version planned", "Service Web ; version bureau prévue", "http://tracking.honsen.africa/", "⌁", false, 7),
+        Web("tracking", "柜号跟踪", "Container Tracking", "Suivi de conteneurs", "当前为网页，后续支持桌面版", "Web service; desktop version planned", "Service Web ; version bureau prévue", "https://tracking.honsen.africa/", "⌁", false, 7),
         Web("attendance-cam", "喀麦隆团队考勤", "Cameroon Team Attendance", "Présence équipe Cameroun", "CAM 团队网页", "CAM team web service", "Service Web équipe CAM", "https://kq.honsen.africa/", "◷", false, 8),
         Web("attendance-et", "埃塞俄比亚团队考勤", "Ethiopia Team Attendance", "Présence équipe Éthiopie", "ETH 团队网页", "ETH team web service", "Service Web équipe ETH", "https://kq-et.honsen.africa/", "◷", false, 9),
         Web("drive", "企业网盘", "Company Drive", "Disque d'entreprise", "公司文件存储", "Company file storage", "Stockage des fichiers d'entreprise", "https://p.honsen.africa/", "□", false, 10),
@@ -231,6 +235,8 @@ public partial class MainWindow : Window
             tool.DisplayType = tool.IsWeb ? Text("网页服务", "Web service", "Service Web") : Text("桌面应用", "Desktop app", "Application bureau");
             tool.DisplayFavouriteSymbol = tool.IsFavourite ? "★" : "☆";
             tool.DisplayActionText = _page == "updates" && tool.HasConnectedRunner ? Text("检查更新 ↗", "Check updates ↗", "Vérifier ↗") : tool.AppId is not null && !tool.HasConnectedRunner ? Text("安装 ↗", "Install ↗", "Installer ↗") : Text("打开 ↗", "Open ↗", "Ouvrir ↗");
+            tool.DisplayToolTip = Text("点击打开；按住卡片拖动排序", "Click to open; hold and drag to reorder", "Cliquez pour ouvrir ; maintenez et glissez pour réorganiser");
+            tool.DisplayFavouriteToolTip = Text("收藏或取消收藏", "Add or remove favourite", "Ajouter ou retirer des favoris");
         }
 
         var results = displayed.OrderBy(tool => tool.SortOrder).ThenByDescending(tool => tool.LastOpenedUtc).ToList();
@@ -245,6 +251,20 @@ public partial class MainWindow : Window
 
     private void ApplyLanguage()
     {
+        AppTitle.Text = Text("Honsen 工具箱", "Honsen Toolbox", "Boîte à outils Honsen");
+        VersionInfo.Text = $"v{typeof(MainWindow).Assembly.GetName().Version?.ToString(3) ?? "1.0.0"}";
+        AuthorLinkLabel.Text = Text("作者 · etianwang ↗", "Author · etianwang ↗", "Auteur · etianwang ↗");
+        AuthorLink.ToolTip = Text("打开 etianwang 的 GitHub 主页", "Open etianwang's GitHub profile", "Ouvrir le profil GitHub d’etianwang");
+        LibraryLabel.Text = Text("工具库", "Toolbox", "Boîte à outils");
+        LanguageLabel.Text = Text("语言", "Language", "Langue");
+        ThemeButton.ToolTip = Text("切换深色模式", "Toggle dark mode", "Basculer le mode sombre");
+        CaptionMinimizeButton.ToolTip = Text("最小化", "Minimize", "Réduire");
+        CaptionCloseButton.ToolTip = Text("关闭", "Close", "Fermer");
+        ClearSearchButton.ToolTip = Text("清除搜索", "Clear search", "Effacer la recherche");
+        SearchBox.ToolTip = Text("输入即可搜索所有工具", "Type to search all tools", "Saisissez pour rechercher tous les outils");
+        System.Windows.Automation.AutomationProperties.SetName(ThemeButton, (string)ThemeButton.ToolTip);
+        System.Windows.Automation.AutomationProperties.SetName(CaptionMinimizeButton, (string)CaptionMinimizeButton.ToolTip);
+        System.Windows.Automation.AutomationProperties.SetName(CaptionCloseButton, (string)CaptionCloseButton.ToolTip);
         Title = Text("Honsen工具箱", "Honsen Toolbox", "Boîte à outils Honsen");
         PageTitle.Text = _page switch
         {
@@ -261,6 +281,12 @@ public partial class MainWindow : Window
         InstallNavLabel.Text = Text("可安装", "Available", "Disponibles");
         UpdatesNavLabel.Text = Text("更新中心", "Updates", "Mises à jour");
         AutostartBox.Content = Text("开机自动启动", "Start with Windows", "Démarrer avec Windows");
+        System.Windows.Automation.AutomationProperties.SetName(ClearSearchButton, ClearSearchButton.ToolTip as string ?? string.Empty);
+        System.Windows.Automation.AutomationProperties.SetName(SearchBox, SearchBox.ToolTip as string ?? string.Empty);
+        System.Windows.Automation.AutomationProperties.SetName(AuthorLink, AuthorLink.ToolTip as string ?? string.Empty);
+        RefreshTrayMenu();
+        UpdateNetworkStatus();
+        UpdateCaptionButtons();
         RefreshTools();
     }
 
@@ -280,9 +306,13 @@ public partial class MainWindow : Window
         SaveState();
         if (tool.HasConnectedRunner) { if (_page == "updates") await CheckForUpdatesAsync(tool); else await LaunchConnectedToolAsync(tool); return; }
         if (tool.AppId is not null) { await InstallKnownToolAsync(tool); return; }
-        Process.Start(new ProcessStartInfo(tool.Url) { UseShellExecute = true });
+        OpenWebTool(tool);
         RefreshTools();
     }
+
+    private void OpenWebTool(ToolEntry tool) => new WebToolWindow(tool.Name(_language), tool.Url, _language) { Owner = this }.Show();
+
+    private void OpenAuthorGitHub_Click(object sender, RoutedEventArgs e) => Process.Start(new ProcessStartInfo("https://github.com/etianwang") { UseShellExecute = true });
 
     private void ToolCard_ContextMenuOpened(object sender, RoutedEventArgs e)
     {
@@ -300,7 +330,12 @@ public partial class MainWindow : Window
         {
             menu.Items.Add(MenuItem(Text("安装", "Install", "Installer"), async () => await InstallKnownToolAsync(tool)));
         }
-        menu.Items.Add(MenuItem(tool.IsWeb ? Text("打开网页", "Open website", "Ouvrir le site") : Text("打开 Release 发布页", "Open Release page", "Ouvrir la page Release"), () => Process.Start(new ProcessStartInfo(tool.Url) { UseShellExecute = true })));
+        if (tool.IsWeb)
+        {
+            menu.Items.Add(MenuItem(Text("在应用内打开", "Open in toolbox", "Ouvrir dans la boîte à outils"), () => OpenWebTool(tool)));
+            menu.Items.Add(MenuItem(Text("用默认浏览器打开", "Open in default browser", "Ouvrir dans le navigateur par défaut"), () => Process.Start(new ProcessStartInfo(tool.Url) { UseShellExecute = true })));
+        }
+        else menu.Items.Add(MenuItem(Text("打开 Release 发布页", "Open Release page", "Ouvrir la page Release"), () => Process.Start(new ProcessStartInfo(tool.Url) { UseShellExecute = true })));
     }
 
     private static MenuItem MenuItem(string label, Action action)
@@ -652,10 +687,44 @@ public partial class MainWindow : Window
 
     private void Theme_Click(object sender, RoutedEventArgs e)
     {
-        var dark = ThemeBrush("Surface.App").Color.R < 100;
-        SetBrush("Surface.App", dark ? "#F4F3EE" : "#1B211E"); SetBrush("Surface.Nav", dark ? "#E8E7E1" : "#242D28"); SetBrush("Surface.Card", dark ? "#FFFFFF" : "#2D3831");
-        SetBrush("Surface.Selected", dark ? "#D1E0D6" : "#395746"); SetBrush("Surface.Hover", dark ? "#EDF4EF" : "#354137"); SetBrush("Text.Primary", dark ? "#242925" : "#F1F5F0");
-        SetBrush("Text.Secondary", dark ? "#59625B" : "#CBD5CC"); SetBrush("Text.Muted", dark ? "#6C726D" : "#AAB7AD"); SetBrush("Border", dark ? "#C8CAC2" : "#4A584E"); SetBrush("Border.Subtle", dark ? "#D7D7D0" : "#3D4B42");
+        ApplyTheme(!_isDarkTheme);
+        SaveState();
+    }
+
+    private void ApplyTheme(bool dark)
+    {
+        _isDarkTheme = dark;
+        SetBrush("Surface.App", dark ? "#1B211E" : "#F5F8FB"); SetBrush("Surface.Nav", dark ? "#242D28" : "#EEF4F8"); SetBrush("Surface.Card", dark ? "#2D3831" : "#FFFFFF");
+        SetBrush("Surface.Selected", dark ? "#395746" : "#CFEDE2"); SetBrush("Surface.Hover", dark ? "#354137" : "#E7F0EC"); SetBrush("Text.Primary", dark ? "#F1F5F0" : "#1F2937");
+        SetBrush("Text.Secondary", dark ? "#CBD5CC" : "#64748B"); SetBrush("Text.Muted", dark ? "#AAB7AD" : "#94A3B8"); SetBrush("Border", dark ? "#4A584E" : "#D9E3EC"); SetBrush("Border.Subtle", dark ? "#3D4B42" : "#E5ECF2"); SetBrush("Accent.Warning", dark ? "#F2B544" : "#E6A21A");
+        SetBrush("TitleBar.Background", dark ? "#1B211E" : "#F5F8FB"); SetBrush("TitleBar.Foreground", dark ? "#F1F5F0" : "#1F2937");
+        SetBrush("Caption.Button.Hover", dark ? "#3B4840" : "#E2E5E0"); SetBrush("Caption.Button.Pressed", dark ? "#4A5A4F" : "#D3D8D3");
+        SetBrush("Caption.Close.Hover", "#C42B1C"); SetBrush("Caption.Close.Pressed", "#A5261A"); SetBrush("Caption.Close.Foreground", "#FFFFFF");
+        SetColor("Window.Shadow.Color", dark ? "#33000000" : "#2B000000");
+    }
+
+    private void CaptionMinimize_Click(object sender, RoutedEventArgs e) => SystemCommands.MinimizeWindow(this);
+
+    private void CaptionMaximizeRestore_Click(object sender, RoutedEventArgs e)
+    {
+        if (WindowState == WindowState.Maximized) SystemCommands.RestoreWindow(this); else SystemCommands.MaximizeWindow(this);
+    }
+
+    private void CaptionClose_Click(object sender, RoutedEventArgs e) => SystemCommands.CloseWindow(this);
+
+    private void Window_StateChanged(object? sender, EventArgs e) => UpdateCaptionButtons();
+
+    private void UpdateCaptionButtons()
+    {
+        var maximized = WindowState == WindowState.Maximized;
+        WindowFrame.Margin = new Thickness(maximized ? 0 : 8);
+        WindowSurface.CornerRadius = new CornerRadius(maximized ? 0 : 10);
+        if (System.Windows.Shell.WindowChrome.GetWindowChrome(this) is { } chrome) chrome.CaptionHeight = maximized ? 42 : 50;
+        MaximizeIcon.Visibility = maximized ? Visibility.Collapsed : Visibility.Visible;
+        RestoreIcon.Visibility = maximized ? Visibility.Visible : Visibility.Collapsed;
+        var captionAction = maximized ? Text("还原", "Restore", "Restaurer") : Text("最大化", "Maximize", "Agrandir");
+        MaximizeRestoreButton.ToolTip = captionAction;
+        System.Windows.Automation.AutomationProperties.SetName(MaximizeRestoreButton, captionAction);
     }
 
     private SolidColorBrush ThemeBrush(string key)
@@ -670,6 +739,12 @@ public partial class MainWindow : Window
         dictionary[key] = new SolidColorBrush((WpfColor)WpfColorConverter.ConvertFromString(hex));
     }
 
+    private void SetColor(string key, string hex)
+    {
+        var dictionary = System.Windows.Application.Current.Resources.MergedDictionaries.First(source => source.Contains(key));
+        dictionary[key] = (WpfColor)WpfColorConverter.ConvertFromString(hex);
+    }
+
     private void Autostart_Changed(object sender, RoutedEventArgs e) => SetAutostart(AutostartBox.IsChecked == true);
 
     private void SetAutostart(bool enabled)
@@ -682,13 +757,18 @@ public partial class MainWindow : Window
 
     private Forms.NotifyIcon CreateTrayIcon()
     {
-        var menu = new Forms.ContextMenuStrip();
-        menu.Items.Add(Text("打开界面", "Open", "Ouvrir"), null, (_, _) => ShowFromTray());
-        menu.Items.Add(Text("退出工具箱", "Exit Toolbox", "Quitter"), null, (_, _) => { _isExiting = true; _trayIcon.Visible = false; System.Windows.Application.Current.Shutdown(); });
         var logoPath = Path.Combine(AppContext.BaseDirectory, "logo.ico");
-        var icon = new Forms.NotifyIcon { Icon = File.Exists(logoPath) ? new System.Drawing.Icon(logoPath) : System.Drawing.SystemIcons.Application, Text = "Honsen工具箱", ContextMenuStrip = menu, Visible = true };
+        var icon = new Forms.NotifyIcon { Icon = File.Exists(logoPath) ? new System.Drawing.Icon(logoPath) : System.Drawing.SystemIcons.Application, Text = "Honsen工具箱", ContextMenuStrip = _trayMenu, Visible = true };
         icon.DoubleClick += (_, _) => ShowFromTray();
         return icon;
+    }
+
+    private void RefreshTrayMenu()
+    {
+        _trayMenu.Items.Clear();
+        _trayMenu.Items.Add(Text("打开界面", "Open", "Ouvrir"), null, (_, _) => ShowFromTray());
+        _trayMenu.Items.Add(Text("退出工具箱", "Exit Toolbox", "Quitter"), null, (_, _) => { _isExiting = true; _trayIcon.Visible = false; System.Windows.Application.Current.Shutdown(); });
+        _trayIcon.Text = Text("Honsen工具箱", "Honsen Toolbox", "Boîte à outils Honsen");
     }
 
     private void ShowFromTray() { Show(); WindowState = WindowState.Normal; Activate(); }
@@ -720,7 +800,7 @@ public partial class MainWindow : Window
             if (!File.Exists(_statePath)) return;
             var state = JsonSerializer.Deserialize<UserState>(File.ReadAllText(_statePath));
             if (state is null) return;
-            _language = state.Language ?? _language; LanguageBox.SelectedIndex = _language == "en" ? 1 : _language == "fr" ? 2 : 0; AutostartBox.IsChecked = state.Autostart;
+            _language = state.Language ?? _language; _isDarkTheme = state.IsDarkTheme; LanguageBox.SelectedIndex = _language == "en" ? 1 : _language == "fr" ? 2 : 0; AutostartBox.IsChecked = state.Autostart;
             foreach (var saved in state.Tools)
                 if (_tools.FirstOrDefault(tool => tool.Id == saved.Id) is { } tool) { tool.IsFavourite = saved.IsFavourite; tool.SortOrder = saved.SortOrder; tool.LastOpenedUtc = saved.LastOpenedUtc; }
         }
@@ -730,11 +810,11 @@ public partial class MainWindow : Window
     private void SaveState()
     {
         Directory.CreateDirectory(Path.GetDirectoryName(_statePath)!);
-        var state = new UserState { Language = _language, Autostart = AutostartBox.IsChecked == true, Tools = _tools.Select(tool => new SavedTool(tool.Id, tool.IsFavourite, tool.SortOrder, tool.LastOpenedUtc)).ToList() };
+        var state = new UserState { Language = _language, IsDarkTheme = _isDarkTheme, Autostart = AutostartBox.IsChecked == true, Tools = _tools.Select(tool => new SavedTool(tool.Id, tool.IsFavourite, tool.SortOrder, tool.LastOpenedUtc)).ToList() };
         File.WriteAllText(_statePath, JsonSerializer.Serialize(state));
     }
 
-    private sealed class UserState { public string? Language { get; set; } public bool Autostart { get; set; } = true; public List<SavedTool> Tools { get; set; } = []; }
+    private sealed class UserState { public string? Language { get; set; } public bool IsDarkTheme { get; set; } public bool Autostart { get; set; } = true; public List<SavedTool> Tools { get; set; } = []; }
     private sealed record SavedTool(string Id, bool IsFavourite, int SortOrder, DateTime? LastOpenedUtc);
     private sealed record ConnectedApp(string Version, string LauncherPath, string? UpdateManifestUrl);
     private sealed record UninstallCommand(string Executable, string Arguments);

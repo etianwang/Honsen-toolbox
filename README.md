@@ -2,14 +2,15 @@
 
 Honsen 工具箱是 Honsen 面向 Windows 10/11 的内部桌面入口。它把网页服务和 Honsen 本地应用放在同一个工具库中，并统一提供收藏、搜索、安装、启动、版本检查、更新调用、卸载和安装登记修复。
 
-> 当前为 Alpha 阶段。已实现的能力以本文为准；工具箱自身在线更新、错误日志上报和 GitHub/Gitee 自动故障切换仍是后续任务。
+> 当前发布目标为 1.0.0。工具箱自身在线更新、错误日志上报和 GitHub/Gitee 自动故障切换仍是后续任务。
 
 ## 运行环境与技术栈
 
 - Windows 10 或 Windows 11
 - C#、.NET 8、WPF
+- 网页工具使用 Microsoft Edge WebView2；未检测到运行时时会提示安装，并始终可改用默认浏览器
 - 默认界面语言为简体中文；用户可随时切换 English 或 Français
-- 本地用户状态保存在 `%LOCALAPPDATA%\HonsenToolbox\state.json`
+- 本地用户状态保存在 `%LOCALAPPDATA%\HonsenToolbox\state.json`，包含语言、主题、收藏、排序和开机自启
 - 工具箱自己的安装登记使用 `honsen.toolbox`
 
 ## 工具库
@@ -20,7 +21,7 @@ Honsen 工具箱是 Honsen 面向 Windows 10/11 的内部桌面入口。它把�
 | 仓库管理 | 桌面应用 | [GitHub Releases](https://github.com/etianwang/Honsen_WMS/releases) |
 | 仓库数据在线查看 | 网页 | <https://wms.honsen.africa/> |
 | 图纸管理 | 网页 | <https://edm.honsen.africa/login> |
-| 柜号跟踪 | 网页 | <http://tracking.honsen.africa/> |
+| 柜号跟踪 | 网页 | <https://tracking.honsen.africa/> |
 | 喀麦隆团队考勤 | 网页 | <https://kq.honsen.africa/> |
 | 埃塞俄比亚团队考勤 | 网页 | <https://kq-et.honsen.africa/> |
 | 企业网盘 | 网页 | <https://p.honsen.africa/> |
@@ -34,7 +35,8 @@ WMS 使用 `honsen.wms`，并按 LTS 策略接入：工具箱可识别已安装�
 ### 工具浏览与使用
 
 - 四个页面：**已收藏**、**全部工具**、**可安装**、**更新中心**。
-- 单击网页卡片，在系统默认浏览器中打开网站。
+- 单击网页卡片，在应用内多标签页中打开；网页调用新窗口时会新增标签页，不会弹出独立浏览器窗口。
+- 网页窗口提供后退、前进、刷新、关闭标签页和“用默认浏览器打开”。
 - 单击已接入且已安装的桌面应用卡片，通过其 `HonsenUpdateRunner.exe launch` 启动应用。
 - 全局搜索：搜索中文、英文、法文名称与说明；按 `Ctrl + K` 可直接聚焦搜索框。
 - 每张卡片右上角星标可收藏/取消收藏；默认收藏图纸翻译器、万能文档翻译器和系统终端。
@@ -63,7 +65,8 @@ WMS 使用 `honsen.wms`，并按 LTS 策略接入：工具箱可识别已安装�
 
 ### 窗口、主题与托盘
 
-- 支持浅色和深色主题，所有文字、卡片、边框和控件使用对应主题颜色。
+- 支持浅色和深色主题，窗口标题栏、文字、卡片、边框和控件均随主题切换，并在下次启动时恢复。
+- 自定义 Windows 标题栏保留拖动、双击最大化、边缘缩放、Snap 和系统按钮行为；非最大化窗口有圆角和阴影。
 - 默认启用开机自启；用户可以在侧栏关闭。
 - 点击窗口关闭按钮仅隐藏到系统托盘，不退出工具箱。
 - 托盘图标双击或菜单“打开界面”可恢复窗口；菜单“退出工具箱”才会真正退出。
@@ -108,8 +111,10 @@ HKLM\Software\Honsen Program\Apps\<appId>
 ```powershell
 dotnet build
 dotnet run
-dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+powershell -ExecutionPolicy Bypass -File .\scripts\build-inno-installer.ps1
 ```
+
+发布脚本使用 Inno Setup 生成 `artifacts\installer\Honsen-Toolbox-<version>-Setup.exe` 及同名 `.sha256` 文件；默认安装到 `Program Files\Honsen Program\Honsen Toolbox`，并创建开始菜单、可选桌面快捷方式与卸载项。
 
 - `catalog.json`：工具目录、名称、说明、网页地址和应用身份。
 - `honsen.app.json`：工具箱自身身份描述。
