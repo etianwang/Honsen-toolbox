@@ -262,6 +262,10 @@ Runner 必须依次：
 - LTS 应用（当前 WMS）不应自动提示或自动执行更新；必须由用户主动点击更新并二次确认。
 - 如果注册表丢失，工具箱不得扫描磁盘；只能由用户选择实际目录后恢复登记。
 
+### 10.1 工具箱自身更新
+
+工具箱自身不依赖 `HonsenUpdateRunner.exe`。用户点击“检查工具箱更新”后，工具箱只接受本项目 GitHub Stable Release 中 HTTPS 的 `Setup.exe` 资产及其 `sha256:` digest；校验通过后先退出，再用固定静默参数和当前安装目录启动 Inno 安装器。下载包暂存于 `%LOCALAPPDATA%\HonsenToolbox\Downloads\honsen.toolbox`，不提供自定义目录，避免网络盘、权限和路径恢复问题。
+
 ## 11. 编码、网络、日志与安全
 
 - 所有 JSON、文本配置、Release 说明和 HTTP 请求/响应按 UTF-8 处理。

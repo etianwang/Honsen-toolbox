@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -23,6 +24,7 @@ namespace HonsenToolbox;
 
 public partial class MainWindow : Window
 {
+    private const string ToolboxReleaseApiUrl = "https://api.github.com/repos/etianwang/Honsen-toolbox/releases/latest";
     private const int HotKeyId = 9001;
     private const uint ModControl = 0x0002;
     private const uint ModAlt = 0x0001;
@@ -67,7 +69,12 @@ public partial class MainWindow : Window
         {
             var path = Path.Combine(AppContext.BaseDirectory, "catalog.json");
             var tools = JsonSerializer.Deserialize<List<ToolEntry>>(File.ReadAllText(path));
-            if (tools is { Count: > 0 }) return tools;
+            if (tools is { Count: > 0 })
+            {
+                foreach (var tool in tools.Where(tool => !string.IsNullOrWhiteSpace(tool.LogoUrl) && !Uri.IsWellFormedUriString(tool.LogoUrl, UriKind.Absolute)))
+                    tool.LogoUrl = new Uri(Path.Combine(AppContext.BaseDirectory, tool.LogoUrl!)).AbsoluteUri;
+                return tools;
+            }
         }
         catch { /* The compiled fallback keeps the launcher usable if the catalog is unavailable. */ }
         return CreateDefaultTools();
@@ -96,7 +103,7 @@ public partial class MainWindow : Window
             key.SetValue("ExecutablePath", executablePath);
             key.SetValue("InstallScope", "user");
             key.SetValue("Publisher", "Honsen");
-            key.SetValue("UpdateManifestUrl", "");
+            key.SetValue("UpdateManifestUrl", ToolboxReleaseApiUrl);
         }
         catch
         {
@@ -126,11 +133,11 @@ public partial class MainWindow : Window
 
     private void DiscoverConnectedApps()
     {
-        foreach (var tool in _tools) { tool.InstalledVersion = null; tool.LauncherPath = null; tool.UpdateManifestUrl = null; tool.LatestVersion = null; }
+        foreach (var tool in _tools) { tool.InstalledVersion = null; tool.LauncherPath = null; tool.UpdateManifestUrl = null; tool.LatestVersion = null; tool.NativeLogo = null; }
         foreach (var tool in _tools.Where(tool => !string.IsNullOrWhiteSpace(tool.AppId)))
         {
             var app = FindInstalledApp(tool.AppId!);
-            if (app is not null) { tool.InstalledVersion = app.Version; tool.LauncherPath = app.LauncherPath; tool.UpdateManifestUrl = app.UpdateManifestUrl; }
+            if (app is not null) { tool.InstalledVersion = app.Version; tool.LauncherPath = app.LauncherPath; tool.UpdateManifestUrl = app.UpdateManifestUrl; tool.NativeLogo = LoadExecutableIcon(app.ExecutablePath); }
         }
     }
 
@@ -156,11 +163,24 @@ public partial class MainWindow : Window
                 var manifest = Path.Combine(location, "honsen.app.json");
                 using var json = JsonDocument.Parse(File.ReadAllText(manifest));
                 if (!json.RootElement.TryGetProperty("appId", out var manifestId) || manifestId.GetString() != appId) continue;
-                return new ConnectedApp(version, launcher, updateManifestUrl);
+                return new ConnectedApp(version, executable, launcher, updateManifestUrl);
             }
             catch { /* Invalid third-party registry or manifest data is ignored. */ }
         }
         return null;
+    }
+
+    private static ImageSource? LoadExecutableIcon(string executablePath)
+    {
+        try
+        {
+            using var icon = System.Drawing.Icon.ExtractAssociatedIcon(executablePath);
+            if (icon is null) return null;
+            var image = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromWidthAndHeight(32, 32));
+            image.Freeze();
+            return image;
+        }
+        catch { return null; }
     }
 
     private void RepairInstall_Click(object sender, RoutedEventArgs e)
@@ -253,6 +273,8 @@ public partial class MainWindow : Window
     {
         AppTitle.Text = Text("Honsen 工具箱", "Honsen Toolbox", "Boîte à outils Honsen");
         VersionInfo.Text = $"v{typeof(MainWindow).Assembly.GetName().Version?.ToString(3) ?? "1.0.0"}";
+        ToolboxUpdateButton.Content = Text("检查工具箱更新", "Check Toolbox updates", "Vérifier les mises à jour");
+        ToolboxUpdateButton.ToolTip = Text("从 GitHub Release 检查工具箱更新", "Check GitHub Releases for a Toolbox update", "Rechercher une mise à jour sur GitHub Releases");
         AuthorLinkLabel.Text = Text("作者 · etianwang ↗", "Author · etianwang ↗", "Auteur · etianwang ↗");
         AuthorLink.ToolTip = Text("打开 etianwang 的 GitHub 主页", "Open etianwang's GitHub profile", "Ouvrir le profil GitHub d’etianwang");
         LibraryLabel.Text = Text("工具库", "Toolbox", "Boîte à outils");
@@ -265,6 +287,7 @@ public partial class MainWindow : Window
         System.Windows.Automation.AutomationProperties.SetName(ThemeButton, (string)ThemeButton.ToolTip);
         System.Windows.Automation.AutomationProperties.SetName(CaptionMinimizeButton, (string)CaptionMinimizeButton.ToolTip);
         System.Windows.Automation.AutomationProperties.SetName(CaptionCloseButton, (string)CaptionCloseButton.ToolTip);
+        System.Windows.Automation.AutomationProperties.SetName(ToolboxUpdateButton, ToolboxUpdateButton.ToolTip as string ?? string.Empty);
         Title = Text("Honsen工具箱", "Honsen Toolbox", "Boîte à outils Honsen");
         PageTitle.Text = _page switch
         {
@@ -313,6 +336,56 @@ public partial class MainWindow : Window
     private void OpenWebTool(ToolEntry tool) => new WebToolWindow(tool.Name(_language), tool.Url, _language) { Owner = this }.Show();
 
     private void OpenAuthorGitHub_Click(object sender, RoutedEventArgs e) => Process.Start(new ProcessStartInfo("https://github.com/etianwang") { UseShellExecute = true });
+
+    private async void ToolboxUpdate_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            ToolboxUpdateButton.IsEnabled = false;
+            PageDescription.Text = Text("正在检查工具箱更新…", "Checking for a Toolbox update…", "Vérification d’une mise à jour de la boîte à outils…");
+            using var release = JsonDocument.Parse(await GitHubClient.GetStringAsync(ToolboxReleaseApiUrl));
+            var tag = release.RootElement.GetProperty("tag_name").GetString()?.Trim().TrimStart('v', 'V');
+            if (!Version.TryParse(tag, out var available)) throw new InvalidOperationException("发布版本格式无法比较。");
+            var installed = typeof(MainWindow).Assembly.GetName().Version ?? new Version(0, 0);
+            if (available <= installed)
+            {
+                PageDescription.Text = Text($"工具箱已是最新版本 v{installed.ToString(3)}。", $"Toolbox is up to date (v{installed.ToString(3)}).", $"La boîte à outils est à jour (v{installed.ToString(3)}).");
+                return;
+            }
+
+            var prompt = Text($"发现工具箱新版本 v{available}（当前 v{installed.ToString(3)}）。\n\n下载完成后将退出工具箱并安装更新。继续吗？", $"Toolbox v{available} is available (current: v{installed.ToString(3)}).\n\nAfter download, Toolbox will close and install the update. Continue?", $"La version v{available} est disponible (actuelle : v{installed.ToString(3)}).\n\nAprès le téléchargement, la boîte à outils se fermera pour installer la mise à jour. Continuer ?");
+            if (System.Windows.MessageBox.Show(prompt, Text("更新工具箱", "Update Toolbox", "Mettre à jour la boîte à outils"), MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
+
+            var asset = release.RootElement.GetProperty("assets").EnumerateArray().FirstOrDefault(item => item.GetProperty("name").GetString()?.EndsWith("Setup.exe", StringComparison.OrdinalIgnoreCase) == true);
+            var name = asset.ValueKind == JsonValueKind.Undefined ? null : Path.GetFileName(asset.GetProperty("name").GetString());
+            var url = asset.ValueKind == JsonValueKind.Undefined ? null : asset.GetProperty("browser_download_url").GetString();
+            var digest = asset.ValueKind == JsonValueKind.Undefined ? null : asset.GetProperty("digest").GetString();
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(url) || !Uri.TryCreate(url, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps || string.IsNullOrWhiteSpace(digest) || !digest.StartsWith("sha256:", StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("发布版本没有可校验的安装包。");
+
+            var installer = Path.Combine(GetDownloadDirectory("honsen.toolbox"), name);
+            PageDescription.Text = Text($"正在下载工具箱 v{available}…", $"Downloading Toolbox v{available}…", $"Téléchargement de la boîte à outils v{available}…");
+            await DownloadFileAsync(uri, installer);
+            await using var installerStream = File.OpenRead(installer);
+            var actualHash = Convert.ToHexString(await SHA256.HashDataAsync(installerStream));
+            if (!string.Equals(actualHash, digest[7..], StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("工具箱安装包 SHA-256 校验失败。");
+
+            var installLocation = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var start = new ProcessStartInfo(installer) { UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(installer)! };
+            start.ArgumentList.Add("/VERYSILENT"); start.ArgumentList.Add("/SUPPRESSMSGBOXES"); start.ArgumentList.Add("/NORESTART"); start.ArgumentList.Add("/SP-"); start.ArgumentList.Add($"/DIR={installLocation}");
+            if (Process.Start(start) is null) throw new InvalidOperationException("无法启动工具箱安装器。");
+            _isExiting = true;
+            _trayIcon.Visible = false;
+            System.Windows.Application.Current.Shutdown();
+        }
+        catch (Exception error)
+        {
+            PageDescription.Text = Text($"工具箱更新未完成：{error.Message}", $"Toolbox update did not complete: {error.Message}", $"La mise à jour n’a pas abouti : {error.Message}");
+        }
+        finally
+        {
+            if (!_isExiting) ToolboxUpdateButton.IsEnabled = true;
+        }
+    }
 
     private void ToolCard_ContextMenuOpened(object sender, RoutedEventArgs e)
     {
@@ -487,9 +560,7 @@ public partial class MainWindow : Window
             var url = asset.ValueKind == JsonValueKind.Undefined ? null : asset.GetProperty("browser_download_url").GetString();
             var digest = asset.ValueKind == JsonValueKind.Undefined ? null : asset.GetProperty("digest").GetString();
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(digest) || !digest.StartsWith("sha256:", StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("发布版本没有可校验的安装包。");
-            var downloadDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HonsenToolbox", "Downloads", tool.AppId!);
-            Directory.CreateDirectory(downloadDirectory);
-            var installer = Path.Combine(downloadDirectory, name!);
+            var installer = Path.Combine(GetDownloadDirectory(tool.AppId!), Path.GetFileName(name!));
             await DownloadInstallerAsync(url, installer, tool);
             string actualHash;
             await using (var installerStream = File.OpenRead(installer)) actualHash = Convert.ToHexString(await SHA256.HashDataAsync(installerStream));
@@ -524,6 +595,23 @@ public partial class MainWindow : Window
             var progress = total is > 0 ? $" {received * 100 / total.Value}%" : "";
             SetInstallStatus(Text($"正在下载 {tool.DisplayName}{progress}", $"Downloading {tool.DisplayName}{progress}", $"Téléchargement de {tool.DisplayName}{progress}"), total is > 0 ? (int)(received * 100 / total.Value) : null);
         }
+    }
+
+    private static async Task DownloadFileAsync(Uri url, string destination)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+        using var response = await GitHubClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+        response.EnsureSuccessStatusCode();
+        await using var source = await response.Content.ReadAsStreamAsync();
+        await using var target = File.Create(destination);
+        await source.CopyToAsync(target);
+    }
+
+    private static string GetDownloadDirectory(string appId)
+    {
+        var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HonsenToolbox", "Downloads", appId);
+        Directory.CreateDirectory(directory);
+        return directory;
     }
 
     private void SetInstallStatus(string status, int? progress = null)
@@ -816,7 +904,7 @@ public partial class MainWindow : Window
 
     private sealed class UserState { public string? Language { get; set; } public bool IsDarkTheme { get; set; } public bool Autostart { get; set; } = true; public List<SavedTool> Tools { get; set; } = []; }
     private sealed record SavedTool(string Id, bool IsFavourite, int SortOrder, DateTime? LastOpenedUtc);
-    private sealed record ConnectedApp(string Version, string LauncherPath, string? UpdateManifestUrl);
+    private sealed record ConnectedApp(string Version, string ExecutablePath, string LauncherPath, string? UpdateManifestUrl);
     private sealed record UninstallCommand(string Executable, string Arguments);
     private sealed record RecoveredApp(string AppId, string DisplayName, string Version, string InstallLocation, string ExecutablePath, string RunnerPath, string Publisher, string UpdateManifestUrl);
     private sealed record InstallPackage(string Repository, string DirectoryName);

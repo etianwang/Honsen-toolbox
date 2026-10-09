@@ -1,3 +1,5 @@
+using System.Windows.Media;
+
 namespace HonsenToolbox.Models;
 
 public sealed class ToolEntry
@@ -11,6 +13,8 @@ public sealed class ToolEntry
     public required string FrenchDescription { get; init; }
     public required string Url { get; init; }
     public required string Icon { get; init; }
+    public string? LogoUrl { get; set; }
+    public ImageSource? NativeLogo { get; set; }
     public string? AppId { get; init; }
     public bool IsWeb { get; init; }
     public bool IsInstallable { get; init; }

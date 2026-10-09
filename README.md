@@ -2,7 +2,7 @@
 
 Honsen 工具箱是 Honsen 面向 Windows 10/11 的内部桌面入口。它把网页服务和 Honsen 本地应用放在同一个工具库中，并统一提供收藏、搜索、安装、启动、版本检查、更新调用、卸载和安装登记修复。
 
-> 当前发布版本为 1.0.1。工具箱自身在线更新、错误日志上报和 GitHub/Gitee 自动故障切换仍是后续任务。
+> 当前发布版本为 1.0.2。工具箱可手动检查 GitHub Stable Release；错误日志上报和 GitHub/Gitee 自动故障切换仍是后续任务。
 
 ## 运行环境与技术栈
 
@@ -61,6 +61,7 @@ WMS 使用 `honsen.wms`，并按 LTS 策略接入：工具箱可识别已安装�
   - 网页工具：打开网站。
 - “检查更新”只比较本机版本与远端 Release，**不会**启动应用、下载文件或修改本机内容。
 - 工具箱不直接替换 EXE 或运行 Inno 更新：真正更新由应用自己的 `HonsenUpdateRunner.exe apply` 完成。工具箱只负责下载、SHA-256 校验、传入安全参数并读取该次操作的结果 JSON。
+- 侧栏版本号下的“检查工具箱更新”会查询本项目 GitHub Stable Release；确认后下载并校验安装器 SHA-256，退出工具箱后由 Inno 安装器在原目录静默更新。下载包暂存于 `%LOCALAPPDATA%\HonsenToolbox\Downloads\honsen.toolbox`。
 - 卸载前会二次确认；工具箱只调用应用注册的受信任静默卸载命令，绝不自行删除应用目录或共享的 `Honsen Program` 父目录。
 
 ### 窗口、主题与托盘
@@ -116,7 +117,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build-inno-installer.ps1
 
 发布脚本使用 Inno Setup 生成 `artifacts\installer\Honsen-Toolbox-<version>-Setup.exe` 及同名 `.sha256` 文件；默认安装到 `Program Files\Honsen Program\Honsen Toolbox`，并创建开始菜单、可选桌面快捷方式与卸载项。
 
-- `catalog.json`：工具目录、名称、说明、网页地址和应用身份。
+- `catalog.json`：工具目录、名称、说明、网页地址、应用身份和可选 `LogoUrl`。网页工具可使用随包 favicon；桌面应用优先显示已安装主 EXE 的图标，未安装时使用其发布仓库的 logo。
 - `honsen.app.json`：工具箱自身身份描述。
 - `Themes/DesignTokens.xaml` 与 `ui-foundation.css`：已确定的视觉设计令牌与参考样式。
 - [memory.md](memory.md)：已验证错误与规避方式；它不替代跨项目协议。
@@ -124,7 +125,6 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build-inno-installer.ps1
 
 ## 当前未做功能
 
-- 工具箱自身的在线检查与静默更新
 - 错误日志上传与服务端接收工具
 - GitHub 访问失败时自动切换至 Gitee 或 `update.honsen.africa`
 - WMS 的首次自动下载与静默安装
