@@ -1,5 +1,5 @@
 #ifndef AppVersion
-  #define AppVersion "1.0.2"
+  #define AppVersion "1.0.3"
 #endif
 #ifndef ReleaseDir
   #define ReleaseDir "..\artifacts\HonsenToolbox-v1.0.0-win-x64"
@@ -52,7 +52,7 @@ Root: HKLM64; Subkey: "{#RegistryKey}"; ValueType: string; ValueName: "Publisher
 Root: HKLM64; Subkey: "{#RegistryKey}"; ValueType: string; ValueName: "UpdateManifestUrl"; ValueData: "https://api.github.com/repos/etianwang/Honsen-toolbox/releases/latest"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"
 
 [Icons]
 Name: "{group}\Honsen 工具箱"; Filename: "{app}\{#AppExeName}"

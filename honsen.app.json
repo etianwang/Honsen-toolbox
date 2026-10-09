@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "appId": "honsen.toolbox",
   "displayName": "Honsen工具箱",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "executable": "HonsenToolbox.exe",
   "publisher": "Honsen",
   "updateManifestUrl": "https://api.github.com/repos/etianwang/Honsen-toolbox/releases/latest"
