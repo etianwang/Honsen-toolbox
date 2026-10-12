@@ -34,6 +34,7 @@ honsen.toolbox
 honsen.cad-translator
 honsen.document-translator
 honsen.wms
+honsen.procure
 ```
 
 ### 2.2 产品目录和版本
